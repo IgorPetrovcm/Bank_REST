@@ -1,28 +1,30 @@
 package com.example.bankcards.service;
 
+import com.example.bankcards.config.properties.AccessTokenProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class JwtService {
-    private static final int MINUTE_IN_MILLIS = 60 * 1000;
-
-    @Value("${spring.security.access-token.expiration-in-minutes}")
-    private static int expirationInMinutes;
+    private final AccessTokenProperties accessTokenProperties;
 
     private final SecretKey secretKey;
 
     public String generateToken(String username) {
+        final var now = new Date(System.currentTimeMillis());
+        final var expiration = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(
+                accessTokenProperties.getExpirationInMinutes()));
         return Jwts.builder()
                 .subject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + (MINUTE_IN_MILLIS * expirationInMinutes)))
+                .issuedAt(now)
+                .notBefore(now)
+                .expiration(expiration)
                 .signWith(secretKey)
                 .compact();
     }
@@ -46,8 +48,8 @@ public class JwtService {
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
 }

@@ -1,5 +1,8 @@
 spring:
+  profiles:
+    active: dev
   security:
     access-token:
-      secret: ${ACCESS_TOKEN_SECRET}
-      expiration-in-minutes: 25
+      secret: d2248669cfe0b6ecaa6b9f855dfb2dd1bbab66ba2140caae329046cedc65db5e589d7430
+      expirationInMinutes: 25
+debug: true
