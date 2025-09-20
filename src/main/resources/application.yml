@@ -1,8 +1,19 @@
 spring:
   profiles:
     active: dev
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/bank
+    username: spring
+    password: secret
+  jpa:
+    hibernate:
+      ddl-auto: update
+
   security:
     access-token:
       secret: d2248669cfe0b6ecaa6b9f855dfb2dd1bbab66ba2140caae329046cedc65db5e589d7430
-      expirationInMinutes: 25
+      expirationInMinutes: 1
+    refresh-token:
+      expirationInHours: 24
 debug: true
