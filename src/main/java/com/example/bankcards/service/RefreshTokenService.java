@@ -2,8 +2,11 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.config.properties.RefreshTokenProperties;
 import com.example.bankcards.entity.RefreshToken;
+import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.RefreshTokenNotFoundException;
+import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.repository.RefreshTokenRepository;
+import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +17,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RefreshTokenService {
     private final RefreshTokenProperties refreshTokenProperties;
+
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
 
     public RefreshToken generate(String username) {
         try {
-            return findByUsername(username);
+            final var user =  userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+            return findByUser(user);
         }
         catch (RefreshTokenNotFoundException e) {
             var token = new RefreshToken();
 
-            token.setUsername(username);
+
             token.setExpiration(Instant.now().plusMillis(
                     refreshTokenProperties.getExpirationInHours() * 60 * 60 * 1000));
             token.setToken(UUID.randomUUID().toString());
@@ -36,8 +42,8 @@ public class RefreshTokenService {
         return refreshTokenRepository.findByToken(token).orElseThrow(RefreshTokenNotFoundException::new);
     }
 
-    public RefreshToken findByUsername(String username) {
-        return refreshTokenRepository.findByUsername(username).orElseThrow(RefreshTokenNotFoundException::new);
+    public RefreshToken findByUser(User user) {
+        return refreshTokenRepository.findByUser(user).orElseThrow(RefreshTokenNotFoundException::new);
     }
 
 
@@ -49,7 +55,7 @@ public class RefreshTokenService {
         return false;
     }
 
-    public void deleteByUsername(String username) {
-        refreshTokenRepository.deleteByUsername(username);
+    public void deleteByUser(User user) {
+        refreshTokenRepository.deleteByUser(user);
     }
 }

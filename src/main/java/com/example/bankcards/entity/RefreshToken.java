@@ -17,11 +17,12 @@ public class RefreshToken {
     private long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false, unique = true)
     private String token;
 
     @Column(nullable = false)
     private Instant expiration;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -37,11 +39,13 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
-        var refreshToken = refreshTokenService.findByToken(refreshTokenRequest.token());
-        if (refreshTokenService.isExpiration(refreshToken)) return ResponseEntity.badRequest().body("Refresh token expired");
-        if (StringUtils.isBlank(refreshToken.getUsername())) return ResponseEntity.internalServerError().body("Invalid refresh token");
+        final var refreshToken = refreshTokenService.findByToken(refreshTokenRequest.token());
+        final var user = refreshToken.getUser();
 
-        var accessToken = jwtService.generateToken(refreshToken.getUsername());
+        if (refreshTokenService.isExpiration(refreshToken)) return ResponseEntity.badRequest().body("Refresh token expired");
+        if (Objects.isNull(user)) return ResponseEntity.internalServerError().body("Invalid refresh token");
+
+        var accessToken = jwtService.generateToken(user.getUsername());
         return ResponseEntity.ok(new RefreshTokenResponse(accessToken, refreshToken.getToken()));
     }
 

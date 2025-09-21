@@ -9,6 +9,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+  liquibase:
+    change-log: classpath:/db/migration/db.changelog-master.yaml
 
   security:
     access-token:

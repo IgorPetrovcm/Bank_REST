@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_002
+      author: IgorPetrovcm
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+              tableName: roles
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+                    unique: true
