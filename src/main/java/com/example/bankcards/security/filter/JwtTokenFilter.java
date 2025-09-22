@@ -1,6 +1,6 @@
 package com.example.bankcards.security.filter;
 
-import com.example.bankcards.service.JwtService;
+import com.example.bankcards.service.security.JwtService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

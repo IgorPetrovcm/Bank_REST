@@ -1,4 +1,4 @@
-package com.example.bankcards.service;
+package com.example.bankcards.service.security;
 
 import com.example.bankcards.config.properties.AccessTokenProperties;
 import io.jsonwebtoken.Claims;

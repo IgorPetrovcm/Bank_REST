@@ -1,4 +1,8 @@
 package com.example.bankcards.dto.response;
 
-public record SignInResponse(String accessToken, String refreshToken) {
+import jakarta.validation.constraints.NotNull;
+
+public record SignInResponse(
+        @NotNull String accessToken,
+        @NotNull String refreshToken) {
 }

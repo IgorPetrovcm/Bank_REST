@@ -1,4 +1,7 @@
 package com.example.bankcards.dto.request;
 
-public record RefreshTokenRequest(String token) {
+import jakarta.validation.constraints.NotNull;
+
+public record RefreshTokenRequest(
+        @NotNull String token) {
 }

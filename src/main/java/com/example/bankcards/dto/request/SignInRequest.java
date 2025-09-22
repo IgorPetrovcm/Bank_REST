@@ -1,4 +1,8 @@
 package com.example.bankcards.dto.request;
 
-public record SignInRequest(String username, String password) {
+import jakarta.validation.constraints.NotNull;
+
+public record SignInRequest(
+        @NotNull String username,
+        @NotNull String password) {
 }
