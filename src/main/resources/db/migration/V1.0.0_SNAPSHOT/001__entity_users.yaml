@@ -4,9 +4,9 @@ databaseChangeLog:
       author: IgorPetrovcm
       preConditions:
         - onFail: MARK_RAN
-          not:
+        - not:
             - tableExists:
-              tableName: users
+                tableName: users
       changes:
         - createTable:
             tableName: users

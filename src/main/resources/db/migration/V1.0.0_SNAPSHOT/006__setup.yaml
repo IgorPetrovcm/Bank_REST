@@ -1,0 +1,69 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_006
+      author: IgorPetrovcm
+      changes:
+        - delete:
+            tableName: roles
+        - delete:
+            tableName: users
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: USER
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: ADMIN
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: user1
+              - column:
+                  name: password
+                  value: "{bcrypt}$2a$12$su0pb3baAkfG7VEFLxsgquF7pHw0FeY.K4eK/u7y2B195gzB66qcS" # secret1
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: username
+                  value: user2
+              - column:
+                  name: password
+                  value: "{bcrypt}$2a$12$5zJrFIZvfjf7mumlHVIT4.grSSH1x5SoNsiK0HgZgDqIfq4hi9wMe"
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: role_id
+                  value: 1
+        - insert:
+            tableName: user_roles
+            columns:
+                - column:
+                    name: user_id
+                    value: 2
+                - column:
+                    name: role_id
+                    value: 2

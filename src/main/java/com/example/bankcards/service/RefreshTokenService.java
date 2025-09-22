@@ -22,17 +22,17 @@ public class RefreshTokenService {
     private final UserRepository userRepository;
 
     public RefreshToken generate(String username) {
+        final var user =  userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
         try {
-            final var user =  userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
             return findByUser(user);
         }
         catch (RefreshTokenNotFoundException e) {
             var token = new RefreshToken();
 
-
             token.setExpiration(Instant.now().plusMillis(
                     refreshTokenProperties.getExpirationInHours() * 60 * 60 * 1000));
             token.setToken(UUID.randomUUID().toString());
+            token.setUser(user);
 
             return refreshTokenRepository.save(token);
         }

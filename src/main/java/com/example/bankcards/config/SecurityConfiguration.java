@@ -16,13 +16,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -48,7 +46,7 @@ public class SecurityConfiguration {
     private final AccessTokenProperties accessTokenProperties;
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
@@ -56,20 +54,8 @@ public class SecurityConfiguration {
                     .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
-
-    @Bean
-    UserDetailsService userDetails(PasswordEncoder encoder) {
-        final var encodePassword = encoder.encode("secret");
-        final var user = User.builder()
-            .password(encodePassword)
-            .username("user1")
-            .roles("user")
-            .build();
-
-        return new InMemoryUserDetailsManager(user);
     }
 
     @Bean
@@ -110,7 +96,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    JwtTokenFilter jwtTokenFilter() {
-        return new JwtTokenFilter(jwtService(), userDetails(bcryptPasswordEncoder()));
+    JwtTokenFilter jwtTokenFilter(UserDetailsService userDetailsService) {
+        return new JwtTokenFilter(jwtService(),  userDetailsService);
     }
 }

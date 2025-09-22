@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_005
+      author: IgorPetrovcm
+      changes:
+        - modifyDataType:
+            tableName: users
+            columnName: password
+            newDataType: VARCHAR(255)
