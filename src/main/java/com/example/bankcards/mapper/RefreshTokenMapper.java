@@ -21,7 +21,9 @@ public class RefreshTokenMapper {
                     userMapper.toDTO(token.getUser(), UserResponse.class)
             ));
         }
-        throw new MappingMatchTypeException();
+        else {
+            throw new MappingMatchTypeException();
+        }
     }
 
     public RefreshToken toEntity(Object dto) {
@@ -34,6 +36,8 @@ public class RefreshTokenMapper {
                     user
             );
         }
-        throw new MappingMatchTypeException();
+        else {
+            throw new MappingMatchTypeException();
+        }
     }
 }

@@ -16,7 +16,10 @@ spring:
   security:
     access-token:
       secret: d2248669cfe0b6ecaa6b9f855dfb2dd1bbab66ba2140caae329046cedc65db5e589d7430
-      expirationInMinutes: 1
+      expirationInMinutes: 30
     refresh-token:
       expirationInHours: 24
 debug: true
+logging:
+  level:
+    com.example.bankcards: DEBUG

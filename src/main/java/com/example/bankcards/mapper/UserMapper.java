@@ -27,7 +27,9 @@ public class UserMapper {
                     null
             ));
         }
-        throw new MappingMatchTypeException();
+        else {
+            throw new MappingMatchTypeException();
+        }
     }
 
     public User toEntity(Object dto) {
@@ -40,10 +42,13 @@ public class UserMapper {
                     given.username(),
                     given.password(),
                     setOfRole,
+                    null,
                     null
             );
         }
+        else {
+            throw new  MappingMatchTypeException();
+        }
 
-        throw new  MappingMatchTypeException();
     }
 }

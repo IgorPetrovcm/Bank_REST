@@ -1,4 +1,4 @@
-package com.example.bankcards.exception.service;
+package com.example.bankcards.exception.entity;
 
 import lombok.NoArgsConstructor;
 

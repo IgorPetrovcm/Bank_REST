@@ -1,7 +1,7 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.dto.response.UserResponse;
-import com.example.bankcards.exception.service.UserNotFoundException;
+import com.example.bankcards.exception.entity.UserNotFoundException;
 import com.example.bankcards.mapper.UserMapper;
 import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

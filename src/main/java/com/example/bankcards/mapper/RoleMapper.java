@@ -14,7 +14,9 @@ public class RoleMapper {
                     role.getName().name()
             ));
         }
-        throw new MappingMatchTypeException();
+        else {
+            throw new MappingMatchTypeException();
+        }
     }
 
     public Role toEntity(Object dto) {
@@ -24,7 +26,9 @@ public class RoleMapper {
                     match(given.name())
             );
         }
-        throw new MappingMatchTypeException();
+        else {
+            throw new MappingMatchTypeException();
+        }
     }
 
     private Role.ERole match(String name) {

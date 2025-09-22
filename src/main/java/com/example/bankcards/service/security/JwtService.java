@@ -31,7 +31,7 @@ public class JwtService {
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final var username = extractUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isExpiredToken(token));
+        return username.equals(userDetails.getUsername()) && !isExpiredToken(token);
     }
 
     public String extractUsernameFromToken(String token) {
@@ -41,7 +41,7 @@ public class JwtService {
 
     private boolean isExpiredToken(String token) {
         final var claims = getClaimsFromToken(token);
-        return claims.getExpiration().after(new Date(System.currentTimeMillis()));
+        return claims.getExpiration().before(new Date(System.currentTimeMillis()));
     }
 
     private Claims getClaimsFromToken(String token) {
