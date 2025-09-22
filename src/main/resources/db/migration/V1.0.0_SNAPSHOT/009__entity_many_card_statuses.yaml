@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_009
+      author: IgorPetrovcm
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+              tableName: card_statuses
+      changes:
+        - createTable:
+            tableName: card_statuses
+            columns:
+              - column:
+                  name: card_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: card_statuses
+            columnNames: card_id, status_id
+            constraintName: pk_card_statuses
+
+        - addForeignKeyConstraint:
+            baseTableName: card_statuses
+            baseColumnNames: card_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            onDelete: NO ACTION
+            onUpdate: CASCADE
+            constraintName: fk_card_statuses_card
+
+        - addForeignKeyConstraint:
+            baseTableName: card_statuses
+            baseColumnNames: status_id
+            referencedTableName: card_status
+            referencedColumnNames: id
+            onDelete: NO ACTION
+            onUpdate: CASCADE
+            constraintName: fk_card_statuses_status

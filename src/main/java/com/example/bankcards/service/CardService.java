@@ -2,16 +2,24 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.dto.request.CardRequest;
 import com.example.bankcards.dto.response.CardResponse;
-import com.example.bankcards.exception.service.UserNotFoundException;
+import com.example.bankcards.entity.CardStatus;
+import com.example.bankcards.exception.entity.CardNotFoundException;
+import com.example.bankcards.exception.entity.UserNotFoundException;
 import com.example.bankcards.mapper.CardMapper;
 import com.example.bankcards.repository.CardRepository;
+import com.example.bankcards.repository.CardStatusRepository;
 import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CardService {
+    private final CardStatusRepository cardStatusRepository;
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
 
@@ -24,5 +32,35 @@ public class CardService {
         var card = cardMapper.toEntity(cardRequest);
         card.setUser(user);
         return cardMapper.toDTO(cardRepository.save(card), CardResponse.class);
+    }
+
+    public Set<CardResponse> getAllCards(Pageable pageable) {
+        var cards = cardRepository.findAll(pageable);
+        return cards.stream()
+                .map(x -> cardMapper.toDTO(x, CardResponse.class))
+                .collect(Collectors.toSet());
+//        return cardRepository.findAll().stream()
+//                .map(x -> cardMapper.toDTO(x, CardResponse.class))
+//                .collect(Collectors.toSet());
+    }
+
+    public CardResponse cardBlock(Long cardId) {
+        var card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        var blockedStatus = new CardStatus();
+        blockedStatus.setStatus(CardStatus.ECardStatus.BLOCKED);
+        card.setStatus(Set.of(blockedStatus));
+        return cardMapper.toDTO(cardRepository.save(card), CardResponse.class);
+    }
+
+    public CardResponse cardActivate(Long cardId) {
+        var card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
+        var activeStatus = new CardStatus();
+        activeStatus.setStatus(CardStatus.ECardStatus.ACTIVE);
+        card.setStatus(Set.of(activeStatus));
+        return cardMapper.toDTO(cardRepository.save(card), CardResponse.class);
+    }
+
+    public void deleteCard(Long cardId) {
+        cardRepository.deleteById(cardId);
     }
 }

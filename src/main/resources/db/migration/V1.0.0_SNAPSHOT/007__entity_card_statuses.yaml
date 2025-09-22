@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_007
+      author: IgorPetrovcm
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+              tableName: card_status
+      changes:
+        - createTable:
+            tableName: card_status
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+
+        - insert:
+            tableName: card_status
+            columns:
+              - column:
+                  name: status
+                  value: ACTIVE
+        - insert:
+            tableName: card_status
+            columns:
+              - column:
+                  name: status
+                  value: BLOCKED
+        - insert:
+            tableName: card_status
+            columns:
+              - column:
+                  name: status
+                  value: EXPIRED

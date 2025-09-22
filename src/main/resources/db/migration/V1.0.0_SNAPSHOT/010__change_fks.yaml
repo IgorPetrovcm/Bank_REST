@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_010
+      author: IgorPetrovcm
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: card_statuses
+            constraintName: fk_card_statuses_card
+        - addForeignKeyConstraint:
+            baseTableName: card_statuses
+            baseColumnNames: card_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            constraintName: fk_card_statuses_card
+        - dropForeignKeyConstraint:
+            baseTableName: card_statuses
+            constraintName: fk_card_statuses_status
+        - addForeignKeyConstraint:
+            baseTableName: card_statuses
+            baseColumnNames: status_id
+            referencedTableName: card_status
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+            constraintName: fk_card_statuses_status

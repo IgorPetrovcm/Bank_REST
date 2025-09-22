@@ -1,9 +1,10 @@
 package com.example.bankcards.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.YearMonth;
 
 public record CardRequest(
         @NotNull Long userId,
@@ -12,7 +13,8 @@ public record CardRequest(
         @NotNull String number,
 
         @Future
-        @NotNull Instant expiration,
+        @JsonFormat(pattern = "yyyy-MM")
+        @NotNull YearMonth expiration,
 
         @DecimalMin(value = "0.0")
         @Positive
