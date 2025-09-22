@@ -26,7 +26,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    @Size(max = 40)
+    @Size(max = 255)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -37,4 +37,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RefreshToken> refreshToken;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Card> cards;
 }
