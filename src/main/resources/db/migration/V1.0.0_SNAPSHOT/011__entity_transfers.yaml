@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_011
+      author: IgorPetrovcm
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+              tableName: transfers
+      changes:
+        - createTable:
+            tableName: transfers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: from_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: to_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(19,2)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+                  defaultValue: now()
+
+        - addForeignKeyConstraint:
+            baseTableName: transfers
+            baseColumnNames: from_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            constraintName: fk_transfers_from_card
+
+        - addForeignKeyConstraint:
+            baseTableName: transfers
+            baseColumnNames: to_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            constraintName: fk_transfers_to_card
+
+        - sql:
+            sql: "ALTER TABLE transfers ADD CONSTRAINT chk_transfers_amount_positive CHECK (amount IS NULL OR amount > 0)"
+
+        - sql:
+            sql: "ALTER TABLE transfers ADD CONSTRAINT chk_transfers_different_cards CHECK (from_id != to_id)"

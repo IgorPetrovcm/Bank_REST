@@ -18,6 +18,6 @@ public record CardRequest(
 
         @DecimalMin(value = "0.0")
         @Positive
-        @Digits(integer = 12, fraction = 2)
+        @Digits(integer = 19, fraction = 2)
         @NotNull BigDecimal balance
 ) {}

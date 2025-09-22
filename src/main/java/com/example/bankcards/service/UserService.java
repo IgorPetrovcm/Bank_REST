@@ -7,6 +7,9 @@ import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -19,5 +22,16 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
 
         return userMapper.toDTO(user, UserResponse.class);
+    }
+
+    public Set<UserResponse> findAll() {
+        var users = userRepository.findAll();
+        return users.stream()
+                .map(x -> userMapper.toDTO(x, UserResponse.class))
+                .collect(Collectors.toSet());
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }
