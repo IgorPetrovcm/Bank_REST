@@ -38,8 +38,8 @@ public class UserService {
     }
 
     public User getCurrentAuthenticatedUser() {
-        var authentication = (User) SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByUsername(authentication.getUsername())
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
     }
 }

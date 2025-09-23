@@ -64,7 +64,8 @@ public class CardMapper {
                     null,
                     expiration,
                     Set.of(cardStatus),
-                    given.balance()
+                    given.balance(),
+                    false
             );
         }
         else {

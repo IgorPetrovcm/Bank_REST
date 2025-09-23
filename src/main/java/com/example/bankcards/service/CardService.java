@@ -5,6 +5,7 @@ import com.example.bankcards.dto.response.CardBalanceResponse;
 import com.example.bankcards.dto.response.CardResponse;
 import com.example.bankcards.entity.CardStatus;
 import com.example.bankcards.exception.entity.CardNotFoundException;
+import com.example.bankcards.exception.entity.CardStatusNotFoundException;
 import com.example.bankcards.exception.entity.UserNotFoundException;
 import com.example.bankcards.mapper.CardMapper;
 import com.example.bankcards.repository.CardRepository;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,18 +51,20 @@ public class CardService {
 
     public CardResponse cardBlock(Long cardId) {
         var card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
-        var blockedStatus = new CardStatus();
-        blockedStatus.setStatus(CardStatus.ECardStatus.BLOCKED);
-        card.setStatus(Set.of(blockedStatus));
+        var newStatus = new HashSet<CardStatus>();
+        newStatus.add( cardStatusRepository.findByStatus(CardStatus.ECardStatus.BLOCKED)
+                .orElseThrow(CardStatusNotFoundException::new));
+        card.setStatus(newStatus);
         if (card.getIsBlockRequested()) card.setIsBlockRequested(false);
         return cardMapper.toDTO(cardRepository.save(card), CardResponse.class);
     }
 
     public CardResponse cardActivate(Long cardId) {
         var card = cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
-        var activeStatus = new CardStatus();
-        activeStatus.setStatus(CardStatus.ECardStatus.ACTIVE);
-        card.setStatus(Set.of(activeStatus));
+        var newStatus = new HashSet<CardStatus>();
+        newStatus.add( cardStatusRepository.findByStatus(CardStatus.ECardStatus.ACTIVE)
+                .orElseThrow(CardStatusNotFoundException::new));
+        card.setStatus(newStatus);
         return cardMapper.toDTO(cardRepository.save(card), CardResponse.class);
     }
 
