@@ -9,3 +9,20 @@ services:
       POSTGRES_DB: bank
     ports:
       - "5432:5432"
+    networks:
+      - bankcards-network
+  app:
+    image: bankcards-spring:latest
+    container_name: bankcards-spring
+#    restart: always
+    depends_on:
+      - db
+    ports:
+      - "2025:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - bankcards-network
+networks:
+  bankcards-network:
+    driver: bridge
