@@ -1,6 +1,8 @@
 package com.example.bankcards.config;
 
 import com.example.bankcards.config.properties.AccessTokenProperties;
+import com.example.bankcards.exception.CustomAccessDeniedHandler;
+import com.example.bankcards.exception.CustomAuthenticationEntryPoint;
 import com.example.bankcards.security.filter.JwtTokenFilter;
 import com.example.bankcards.service.security.JwtService;
 import io.jsonwebtoken.Jwts;
@@ -46,6 +48,9 @@ public class SecurityConfiguration {
 
     private final AccessTokenProperties accessTokenProperties;
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         return http
@@ -55,6 +60,10 @@ public class SecurityConfiguration {
                     auth.requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs.yaml").permitAll()
                     .anyRequest().authenticated()
+                )
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtTokenFilter(userDetailsService), UsernamePasswordAuthenticationFilter.class)

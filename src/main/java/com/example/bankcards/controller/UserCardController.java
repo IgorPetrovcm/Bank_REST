@@ -42,10 +42,6 @@ public class UserCardController {
 
     @Operation(
             summary = "Получить все карты пользователя",
-            parameters = {
-                    @Parameter(name = "page", description = "Номер страницы (начинается с 0)", example = "0"),
-                    @Parameter(name = "size", description = "Размер страницы", example = "10"),
-            },
             responses = {
                     @ApiResponse(
                             responseCode = "200",

@@ -30,8 +30,6 @@ public class AdminCardController {
     @Operation(
             summary = "Получить все карты с пагинацией",
             parameters = {
-        @Parameter(name = "page", description = "Номер страницы (начинается с 0)", example = "0"),
-        @Parameter(name = "size", description = "Размер страницы", example = "20"),
         },
         responses = {
                 @ApiResponse(
