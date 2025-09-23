@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -19,6 +20,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/user-card")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('USER')")
 public class UserCardController {
     private final CardService cardService;
 

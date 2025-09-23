@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,6 +25,7 @@ import java.util.Set;
 @RequestMapping("/api/admin-card")
 @RequiredArgsConstructor
 @Tag(name = "Cards", description = "Инструменты Админа для управления банковскими картами")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminCardController {
     private final CardService cardService;
 
