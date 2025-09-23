@@ -2,7 +2,7 @@ package com.example.bankcards.config;
 
 import com.example.bankcards.config.properties.AccessTokenProperties;
 import com.example.bankcards.security.filter.JwtTokenFilter;
-import com.example.bankcards.service.JwtService;
+import com.example.bankcards.service.security.JwtService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -48,6 +49,7 @@ public class SecurityConfiguration {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
         return http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/api/auth/**").permitAll()
