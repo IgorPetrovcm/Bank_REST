@@ -41,5 +41,8 @@ public class Card {
 
     @Column(nullable = false)
     private BigDecimal balance;
+
+    @Column(name = "is_block_requested", nullable = false)
+    private Boolean isBlockRequested;
 }
 

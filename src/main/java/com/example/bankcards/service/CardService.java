@@ -1,6 +1,7 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.dto.request.CardRequest;
+import com.example.bankcards.dto.response.CardBalanceResponse;
 import com.example.bankcards.dto.response.CardResponse;
 import com.example.bankcards.entity.CardStatus;
 import com.example.bankcards.exception.entity.CardNotFoundException;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CardService {
+    private final UserService userService;
+
     private final CardStatusRepository cardStatusRepository;
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
@@ -49,6 +52,7 @@ public class CardService {
         var blockedStatus = new CardStatus();
         blockedStatus.setStatus(CardStatus.ECardStatus.BLOCKED);
         card.setStatus(Set.of(blockedStatus));
+        if (card.getIsBlockRequested()) card.setIsBlockRequested(false);
         return cardMapper.toDTO(cardRepository.save(card), CardResponse.class);
     }
 
@@ -62,5 +66,38 @@ public class CardService {
 
     public void deleteCard(Long cardId) {
         cardRepository.deleteById(cardId);
+    }
+
+    public CardBalanceResponse getBalance(Long cardId) {
+        var user = userService.getCurrentAuthenticatedUser();
+
+        var card = user.getCards().stream()
+                .filter(x -> x.getId().equals(cardId))
+                .findFirst()
+                .orElseThrow(CardNotFoundException::new);
+        return new CardBalanceResponse(card.getId(), card.getBalance());
+    }
+
+    public Set<CardResponse> getAllCardsForCurrentUser(Pageable pageable) {
+        var user = userService.getCurrentAuthenticatedUser();
+        return cardRepository.findAllByUserId(user.getId(), pageable).stream()
+                .map(x -> cardMapper.toDTO(x, CardResponse.class))
+                .collect(Collectors.toSet());
+    }
+
+    public CardResponse requestToBlockCard(Long cardId) {
+        var user = userService.getCurrentAuthenticatedUser();
+        var card = user.getCards().stream()
+                .filter(x -> x.getId().equals(cardId))
+                .findFirst()
+                .orElseThrow(CardNotFoundException::new);
+        card.setIsBlockRequested(true);
+        return cardMapper.toDTO(cardRepository.save(card), CardResponse.class);
+    }
+
+    public Set<CardResponse> getAllCardsBlockRequested() {
+        return cardRepository.findByIsBlockRequested(true).stream()
+                .map(x -> cardMapper.toDTO(x, CardResponse.class))
+                .collect(Collectors.toSet());
     }
 }

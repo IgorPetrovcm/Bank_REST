@@ -24,6 +24,11 @@ public class AdminCardController {
         return ResponseEntity.ok(cardService.getAllCards(pageable));
     }
 
+    @GetMapping("/block-requested")
+    public ResponseEntity<Set<CardResponse>> getAllByIsBlockRequested() {
+        return ResponseEntity.ok(cardService.getAllCardsBlockRequested());
+    }
+
     @PostMapping
     public ResponseEntity<CardResponse> createCard(@RequestBody @Valid CardRequest cardRequest)
     throws URISyntaxException {

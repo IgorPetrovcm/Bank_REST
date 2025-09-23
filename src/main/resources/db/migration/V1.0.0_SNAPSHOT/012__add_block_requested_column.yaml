@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1.0.0_SNAPSHOT_012
+      author: IgorPetrovcm
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - columnExists:
+              tableName: cards
+              columnName: is_block_requested
+      changes:
+        - addColumn:
+            tableName: cards
+            columns:
+              - column:
+                  name: is_block_requested
+                  type: boolean
