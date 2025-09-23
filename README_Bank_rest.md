@@ -13,3 +13,18 @@
 - [x] Миграция через Liquibase
 - [x] Springdoc OpenAPI
 - [ ] Юнит тесты
+
+## Инструкция к развертыванию
+Соберите образ приложения с помощью buildpacks:
+```
+mvn clean package spring-boot:build-image
+```
+
+Разверните приложение при помощи docker-compose:
+```
+docker-compose up -d
+```
+
+Приложение будет доступно по адресу `http://loclahost:2025`
+
+По адресу `http://localhost:2025/swagger-ui/index.html`, чтобы получить swagger-ui
