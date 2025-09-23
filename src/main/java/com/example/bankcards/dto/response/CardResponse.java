@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 public record CardResponse(
         @NotNull Long id,
         @NotNull Long userId,
+
         @NotNull String maskedNumber,
         @NotNull String status,
         @NotNull BigDecimal balance
